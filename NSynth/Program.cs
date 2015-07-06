@@ -6,6 +6,9 @@ namespace NSynth
     public class Program
     {
         private static WaveOut waveOut;
+        private static SignalProvider signalProvider;
+        private static float frequencyIncrement = 10;
+        private static float amplitudeIncrement = 0.1f;
 
         private static void Main(string[] args)
         {
@@ -13,9 +16,23 @@ namespace NSynth
             {
                 ConsoleKey keyPressed = Console.ReadKey().Key;
 
-                if (keyPressed == ConsoleKey.S)
+                switch (keyPressed)
                 {
-                    TogglePlayback();
+                    case ConsoleKey.S:
+                        TogglePlayback();
+                        break;
+                    case ConsoleKey.UpArrow:
+                        signalProvider.Frequency += frequencyIncrement;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        signalProvider.Frequency -= frequencyIncrement;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        signalProvider.Amplitude += amplitudeIncrement;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        signalProvider.Amplitude -= amplitudeIncrement;
+                        break;
                 }
             }
         }
@@ -24,7 +41,7 @@ namespace NSynth
         {
             if (waveOut == null)
             {
-                var signalProvider = new SignalProvider(new SawtoothWaveCalculator());
+                signalProvider = new SignalProvider(new SawtoothWaveCalculator(9));
 
                 int sampleRate = 16000;
                 int channels = 1;

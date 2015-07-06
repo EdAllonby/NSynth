@@ -39,7 +39,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HarmonicSignalCalculator.cs" />
+    <Compile Include="ComplexWaveCalculator.cs" />
     <Compile Include="IWaveformCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

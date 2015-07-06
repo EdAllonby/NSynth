@@ -8,6 +8,8 @@ namespace NSynth
         private int sample;
 
         private readonly IWaveformCalculator waveformCalculator;
+        private float amplitude;
+        private float frequency;
 
         public SignalProvider(IWaveformCalculator waveformCalculator)
         {
@@ -17,9 +19,29 @@ namespace NSynth
             Amplitude = 0.25f;
         }
 
-        public float Amplitude { get; set; }
+        public float Amplitude
+        {
+            get { return amplitude; }
+            set
+            {
+                if (value >= 0 && value <= 1)
+                {
+                    amplitude = value;
+                }
+            }
+        }
 
-        public float Frequency { get; set; }
+        public float Frequency
+        {
+            get { return frequency; }
+            set
+            {
+                if (value > 0 && value < 20000)
+                {
+                    frequency = value;
+                }
+            }
+        }
 
         public override int Read(float[] buffer, int offset, int sampleCount)
         {

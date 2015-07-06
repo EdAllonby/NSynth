@@ -1,22 +1,19 @@
 ﻿namespace NSynth
 {
-    public sealed class TriangleWaveCalculator : IWaveformCalculator
+    public sealed class TriangleWaveCalculator : ComplexWaveCalculator
     {
-        private readonly HarmonicSignalCalculator harmonicSignalCalculator = new HarmonicSignalCalculator();
-
-        public float CalculateForSample(int sample, float frequency, int sampleRate)
+        public TriangleWaveCalculator(int finalHarmonic) : base(finalHarmonic)
         {
-            return harmonicSignalCalculator.CalculateHarmonicsForSample(9, OddHarmonics, InverseSquaredAmplitude, sample, frequency, sampleRate);
         }
 
-        private static bool OddHarmonics(int harmonic)
+        protected override bool IsHarmonicIncluded(int harmonic)
         {
-            return harmonic%2 != 0;
+            return harmonic % 2 != 0;
         }
 
-        private static float InverseSquaredAmplitude(int harmonic)
+        protected override float AmplitudeForHarmonic(int harmonic)
         {
-            return 1/(float) (harmonic*harmonic);
+            return 1 / (float)(harmonic * harmonic);
         }
     }
 }

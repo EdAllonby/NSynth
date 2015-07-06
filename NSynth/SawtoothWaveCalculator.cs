@@ -1,15 +1,17 @@
 ﻿namespace NSynth
 {
-    public sealed class SawtoothWaveCalculator : IWaveformCalculator
+    public sealed class SawtoothWaveCalculator : ComplexWaveCalculator
     {
-        private readonly HarmonicSignalCalculator harmonicSignalCalculator = new HarmonicSignalCalculator();
-
-        public float CalculateForSample(int sample, float frequency, int sampleRate)
+        public SawtoothWaveCalculator(int finalHarmonic) : base(finalHarmonic)
         {
-            return harmonicSignalCalculator.CalculateHarmonicsForSample(9, x => true, InverseAmplitude, sample, frequency, sampleRate);
         }
 
-        private static float InverseAmplitude(int harmonic)
+        protected override bool IsHarmonicIncluded(int harmonic)
+        {
+            return true;
+        }
+
+        protected override float AmplitudeForHarmonic(int harmonic)
         {
             return 1/(float) harmonic;
         }
