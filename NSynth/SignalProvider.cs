@@ -1,22 +1,33 @@
-﻿using System;
+﻿using NAudio.Dsp;
 using NAudio.Wave;
 
 namespace NSynth
 {
     public sealed class SignalProvider : WaveProvider32
     {
-        private int sample;
-
+        private readonly EnvelopeGenerator envelope = new EnvelopeGenerator();
         private readonly IWaveformCalculator waveformCalculator;
         private float amplitude;
         private float frequency;
+        private int sample;
 
         public SignalProvider(IWaveformCalculator waveformCalculator)
         {
+            envelope.AttackRate = 44100;
+            envelope.DecayRate = 44100;
+            envelope.SustainLevel = 0.5f;
+            envelope.ReleaseRate = 44100;
+
             this.waveformCalculator = waveformCalculator;
 
             Frequency = 1000f;
             Amplitude = 0.25f;
+        }
+
+        public bool NoteState
+        {
+            get { return envelope.State != EnvelopeGenerator.EnvelopeState.Idle; }
+            set { envelope.Gate(value); }
         }
 
         public float Amplitude
@@ -49,8 +60,17 @@ namespace NSynth
 
             for (int n = 0; n < sampleCount; n++)
             {
-                buffer[n + offset] = Amplitude*waveformCalculator.CalculateForSample(sample, Frequency, sampleRate);
+                float envelopeAmplitude = envelope.Process();
 
+                if (envelopeAmplitude > 0)
+                {
+
+                    buffer[n + offset] = Amplitude*envelopeAmplitude*waveformCalculator.CalculateForSample(sample, Frequency, sampleRate);
+                }
+                else
+                {
+                    buffer[n + offset] = 0;
+                }
                 sample++;
 
                 if (sample >= sampleRate)

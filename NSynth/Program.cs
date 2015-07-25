@@ -12,6 +12,8 @@ namespace NSynth
 
         private static void Main(string[] args)
         {
+            TogglePlayback();
+
             while (true)
             {
                 ConsoleKey keyPressed = Console.ReadKey().Key;
@@ -19,7 +21,7 @@ namespace NSynth
                 switch (keyPressed)
                 {
                     case ConsoleKey.S:
-                        TogglePlayback();
+                        signalProvider.NoteState = !signalProvider.NoteState;
                         break;
                     case ConsoleKey.UpArrow:
                         signalProvider.Frequency += frequencyIncrement;
@@ -43,7 +45,7 @@ namespace NSynth
             {
                 signalProvider = new SignalProvider(new SawtoothWaveCalculator(9));
 
-                int sampleRate = 16000;
+                int sampleRate = 44100;
                 int channels = 1;
 
                 signalProvider.SetWaveFormat(sampleRate, channels);
