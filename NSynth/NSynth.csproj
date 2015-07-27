@@ -48,6 +48,7 @@
     <Compile Include="SineWaveCalculator.cs" />
     <Compile Include="SquareWaveCalculator.cs" />
     <Compile Include="TriangleWaveCalculator.cs" />
+    <Compile Include="WavetableCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

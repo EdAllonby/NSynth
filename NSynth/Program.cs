@@ -43,7 +43,7 @@ namespace NSynth
         {
             if (waveOut == null)
             {
-                signalProvider = new SignalProvider(new SawtoothWaveCalculator(9));
+                signalProvider = new SignalProvider(new WavetableCalculator(new SawtoothWaveCalculator(9)));
 
                 int sampleRate = 44100;
                 int channels = 1;
