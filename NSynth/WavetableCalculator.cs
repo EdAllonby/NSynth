@@ -5,29 +5,54 @@ namespace NSynth
 {
     public sealed class WavetableCalculator : IWaveformCalculator
     {
-        private readonly List<float> wavetable = new List<float>();
+        private readonly Wavetable wavetable;
+
         private float currentWavetablePosition;
 
         public WavetableCalculator(IWaveformCalculator calculator)
         {
             int wavetableSize = 1024;
 
+            List<float> wavetableSamples = new List<float>();
+
             for (int position = 0; position < wavetableSize; position++)
             {
                 float sample = calculator.CalculateForSample(position, wavetableSize, wavetableSize*wavetableSize);
-                wavetable.Add(sample);
+                wavetableSamples.Add(sample);
             }
+
+            wavetable = new Wavetable(wavetableSamples);
         }
 
         public float CalculateForSample(int sample, float frequency, int sampleRate)
         {
-            float wavetableSample = wavetable[(int) Math.Round(currentWavetablePosition)];
+            float interpolatedSample = InterpolateCurrentPosition();
 
-            float step = wavetable.Count*frequency/sampleRate;
+            float step = wavetable.Size*frequency/sampleRate;
 
-            currentWavetablePosition = (currentWavetablePosition + step)%(wavetable.Count - 1);
+            currentWavetablePosition = (currentWavetablePosition + step)%(wavetable.Size - 1);
 
-            return wavetableSample;
+            return interpolatedSample;
+        }
+
+        private float InterpolateCurrentPosition()
+        {
+            float previousSample = wavetable.SampleAtPosition((int) Math.Floor(currentWavetablePosition));
+            float nextSample = wavetable.SampleAtPosition((int) Math.Ceiling(currentWavetablePosition));
+
+            return LinearInterpolate(previousSample, nextSample);
+        }
+
+        private float LinearInterpolate(float previousSample, float nextSample)
+        {
+            float positionFraction = GetFraction(currentWavetablePosition);
+
+            return (nextSample - previousSample)*positionFraction + previousSample;
+        }
+
+        private float GetFraction(float value)
+        {
+            return (float) (value - Math.Truncate(value));
         }
     }
 }
