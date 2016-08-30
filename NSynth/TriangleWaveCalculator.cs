@@ -16,7 +16,8 @@ namespace NSynth
         protected override float AmplitudeForHarmonic(int harmonic)
         {
             // multiplying by sin(harmonic * pi / 2) inverts every other odd harmonic
-            return (float)((1.0 / (harmonic * harmonic)) * Math.Sin(harmonic * Math.PI / 2));
+            // multiplying by 8 / pi^2 renormalises the amplitude
+            return (float)((1.0 / (harmonic * harmonic)) * Math.Sin(harmonic * Math.PI / 2) * (8.0 / (Math.PI * Math.PI)));
         }
     }
 }

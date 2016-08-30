@@ -1,4 +1,6 @@
-﻿namespace NSynth
+﻿using System;
+
+namespace NSynth
 {
     public sealed class SawtoothWaveCalculator : ComplexWaveCalculator
     {
@@ -13,7 +15,8 @@
 
         protected override float AmplitudeForHarmonic(int harmonic)
         {
-            return 1/(float) harmonic;
+            // multiplying by 2 / pi renormalises the amplitude
+            return (float)((1.0 / harmonic) * (2.0 / Math.PI));
         }
     }
 }
