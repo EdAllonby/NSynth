@@ -8,7 +8,7 @@ module Program =
     
     [<EntryPoint>]
     let main argv = 
-        let sawtoothWave = fun sample sampleRate -> createWave sawtoothWave 1000.0 0.5 sample sampleRate
+        let sawtoothWave = fun sample sampleRate -> createWave sawtoothWave 1000.0<hz> 0.5 sample sampleRate
         let wave = WaveProvider(sawtoothWave)
         wave.SetWaveFormat(44100, 1)
         let waveOut = new WaveOut()
