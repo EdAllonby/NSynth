@@ -16,8 +16,7 @@ module WaveCalculators =
                 fun sample sampleRate -> 
                     match harmonic with
                     | harmonic when harmonic < finalHarmonic -> 
-                        let pointOnHarmonic = 
-                            createSineWave (cs.frequencyMagnitude frequency harmonic) (cs.amplitudeScale amplitude harmonic)
+                        let pointOnHarmonic = createSineWave (cs.frequencyMagnitude frequency harmonic) (cs.amplitudeScale amplitude harmonic)
                         let currentHarmonicPoint = pointOnHarmonic sample sampleRate
                         let harmonicPointAccumulator = (+) (calculateForHarmonic (harmonic + cs.harmonicIncrement) sample sampleRate)
                         harmonicPointAccumulator currentHarmonicPoint

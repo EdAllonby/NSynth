@@ -7,14 +7,16 @@ module Program =
     open WaveCalculators
     
     [<EntryPoint>]
-    let main argv = 
+    let main _ = 
+        let waveOut = new WaveOut()
         let sawtoothWave = fun sample sampleRate -> createWave sawtoothWave 1000.0<hz> 0.5 sample sampleRate
         let wave = WaveProvider(sawtoothWave)
         wave.SetWaveFormat(44100, 1)
-        let waveOut = new WaveOut()
         waveOut.Init(wave)
         waveOut.Play()
-        let wait = Console.ReadLine()
-        waveOut.Stop()
-        waveOut.Dispose()
+        while true do
+            let key = Console.ReadKey(true).Key
+            match key with
+            | ConsoleKey.S -> wave.NoteState <- Operators.not wave.NoteState
+            | _ -> ()
         0
