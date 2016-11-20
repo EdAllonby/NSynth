@@ -19,6 +19,7 @@ module DomainTypes =
     type Wave = 
         | Sine
         | Complex of Complex
+        | Noise
     
     type WaveProvider(getPointOnWave : int -> float<hz> -> float) = 
         inherit WaveProvider32()
@@ -39,5 +40,6 @@ module DomainTypes =
             let sampleRate = float this.WaveFormat.SampleRate * 1.0<hz> // Sample rate is measure in hz
             for sample in 0..sampleCount do
                 let envelopeAmplitude = envelope.Process()
-                buffer.[sample + offset] <- envelopeAmplitude * float32 (getPointOnWave sample sampleRate)
+                let nextSample =  float32 (getPointOnWave sample sampleRate)
+                buffer.[sample + offset] <- envelopeAmplitude * nextSample
             sampleCount

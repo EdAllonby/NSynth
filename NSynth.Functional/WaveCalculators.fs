@@ -3,7 +3,11 @@
 module WaveCalculators = 
     open System
     
-    let createSineWave (frequency : float<hz>) amplitude = 
+    let private randomNumberGenerator = Random()
+
+    let private randomSample maximumAmplitude = maximumAmplitude * ((2. * randomNumberGenerator.NextDouble()) - 1.0)
+
+    let private createSineWave (frequency : float<hz>) amplitude = 
         fun sample sampleRate -> amplitude * Math.Sin((2.0 * Math.PI * (float sample) * frequency) / sampleRate)
     
     let createWave wave frequency amplitude = 
@@ -22,3 +26,6 @@ module WaveCalculators =
                         harmonicPointAccumulator currentHarmonicPoint
                     | _ -> 0.0 // End calculation when we reach a certain harmonic
             calculateForHarmonic 1 // Start the calculation at the first hamonic
+        | Noise ->
+            fun _ _ -> randomSample amplitude
+
